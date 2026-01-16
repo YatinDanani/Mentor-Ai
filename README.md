@@ -18,7 +18,7 @@ pip install google-genai python-dotenv
 ### 2. Add API key
 Create `.env` file:
 ```
-GEMINI_API_KEY=your_key_here
+GOOGLE_GEMINI_KEY=your_key_here
 ```
 
 ### 3. Run
