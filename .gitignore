@@ -19,3 +19,7 @@ uploads/
 # IDE settings
 .vscode/
 .idea/
+
+# Database
+data/
+*.db

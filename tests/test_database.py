@@ -1,6 +1,11 @@
 import pytest
 import os
-from backend.database import Database
+import sys 
+
+# Add parent directory to path so we can import from backend
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+from database import Database
 
 @pytest.fixture
 def test_db():
