@@ -54,6 +54,19 @@ class Database:
             )
         ''')
         
+        # Files table
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS files (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                session_id TEXT,
+                file_path TEXT,
+                file_type TEXT,
+                original_name TEXT,
+                uploaded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (session_id) REFERENCES sessions (id)
+            )
+        ''')
+        
         conn.commit()
         conn.close()
         print(" Database initialized ")
@@ -187,3 +200,73 @@ class Database:
         if row:
             return dict(row)
         return None
+    
+    def delete_session(self, session_id):
+        """Delete a session and all its messages"""
+        conn = self.get_connection()
+        cursor = conn.cursor()
+        
+        cursor.execute('DELETE FROM messages WHERE session_id = ?', (session_id,))
+        cursor.execute('DELETE FROM sessions WHERE id = ?', (session_id,))
+        
+        conn.commit()
+        conn.close()
+    
+    def rename_session(self, session_id, new_title):
+        """Rename a session"""
+        conn = self.get_connection()
+        cursor = conn.cursor()
+        
+        cursor.execute('''
+            UPDATE sessions SET title = ? WHERE id = ?
+        ''', (new_title, session_id))
+        
+        conn.commit()
+        conn.close()
+    
+    def add_file(self, session_id, file_path, file_type, original_name):
+        """Add a file attachment to a session"""
+        conn = self.get_connection()
+        cursor = conn.cursor()
+        
+        cursor.execute('''
+            INSERT INTO files (session_id, file_path, file_type, original_name)
+            VALUES (?, ?, ?, ?)
+        ''', (session_id, file_path, file_type, original_name))
+        
+        conn.commit()
+        conn.close()
+    
+    def get_session_files(self, session_id):
+        """Get all files for a session"""
+        conn = self.get_connection()
+        cursor = conn.cursor()
+        
+        cursor.execute('''
+            SELECT id, file_path, file_type, original_name, uploaded_at
+            FROM files WHERE session_id = ?
+            ORDER BY uploaded_at DESC
+        ''', (session_id,))
+        
+        files = [dict(row) for row in cursor.fetchall()]
+        conn.close()
+        return files
+    
+    def delete_file(self, file_id):
+        """Delete a file"""
+        conn = self.get_connection()
+        cursor = conn.cursor()
+        
+        cursor.execute('SELECT file_path FROM files WHERE id = ?', (file_id,))
+        row = cursor.fetchone()
+        
+        if row:
+            file_path = row[0]
+            import os
+            if os.path.exists(file_path):
+                os.remove(file_path)
+            
+            cursor.execute('DELETE FROM files WHERE id = ?', (file_id,))
+            conn.commit()
+        
+        conn.close()

@@ -15,6 +15,7 @@ export interface Message {
   role: 'user' | 'model'
   content: string
   timestamp: string
+  audio_url?: string
 }
 
 export interface Session {

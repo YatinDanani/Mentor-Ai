@@ -48,13 +48,39 @@ export const apiClient = {
     return response.data
   },
 
-  async getHistory(sessionId: string) {
-    const response = await api.get(`/history/${sessionId}`)
+  async sendVoiceMessage(sessionId: string, audioFile: File) {
+    const formData = new FormData()
+    formData.append('audio', audioFile)
+    formData.append('session_id', sessionId)
+
+    const response = await api.post('/chat/voice', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    })
     return response.data
   },
 
-  async getSessions() {
-    const response = await api.get('/sessions')
+  async uploadFile(sessionId: string, file: File) {
+    const formData = new FormData()
+    formData.append('file', file)
+    formData.append('session_id', sessionId)
+
+    const response = await api.post('/upload', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    })
+    return response.data
+  },
+
+  async getSessionFiles(sessionId: string) {
+    const response = await api.get(`/files/${sessionId}`)
+    return response.data
+  },
+
+  async deleteFile(fileId: string) {
+    const response = await api.delete(`/files/${fileId}`)
     return response.data
   },
 }

@@ -1,4 +1,5 @@
 .env
+.git-backup/
 
 # Virtual environment
 venv/
@@ -13,13 +14,13 @@ __pycache__/
 .DS_Store
 Thumbs.db
 
-# Uploads folder (user data)
+# Uploads folder
 uploads/
-
-# IDE settings
-.vscode/
-.idea/
 
 # Database
 data/
 *.db
+
+# IDE settings
+.vscode/
+.idea/
