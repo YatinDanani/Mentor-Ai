@@ -1,0 +1,45 @@
+{
+  "name": "mentorai-backend",
+  "version": "1.0.0",
+  "description": "MentorAI Backend - Flask API with Gemini 3 Integration",
+  "main": "app.py",
+  "scripts": {
+    "start": "python app.py",
+    "dev": "FLASK_ENV=development FLASK_DEBUG=1 python app.py",
+    "test": "pytest tests/ -v",
+    "test:coverage": "pytest tests/ --cov=app --cov=database --cov=auth --cov-report=html --cov-report=term",
+    "test:watch": "pytest-watch tests/",
+    "lint": "flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics",
+    "lint:all": "flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics",
+    "format": "black .",
+    "format:check": "black --check .",
+    "typecheck": "mypy .",
+    "validate": "npm run lint:all && npm run format:check && npm run test",
+    "prebuild": "npm run validate",
+    "db:init": "python -c \"from database import init_db; init_db()\"",
+    "db:migrate": "python -c \"from database import migrate_db; migrate_db()\"",
+    "db:seed": "python -c \"from database import seed_db; seed_db()\"",
+    "db:reset": "npm run db:init && npm run db:seed"
+  },
+  "keywords": [
+    "flask",
+    "gemini",
+    "ai",
+    "chatbot",
+    "education",
+    "tutoring"
+  ],
+  "author": "Yatin",
+  "license": "MIT",
+  "devDependencies": {
+    "black": "^24.1.1",
+    "flake8": "^7.0.0",
+    "mypy": "^1.8.0",
+    "pytest-cov": "^4.1.0",
+    "pytest-watch": "^4.2.0"
+  },
+  "engines": {
+    "python": ">=3.10",
+    "node": ">=18.0.0"
+  }
+}

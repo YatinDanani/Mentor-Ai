@@ -1,0 +1,36 @@
+[project]
+name = "mentorai"
+
+[builds]
+[builds.backend]
+builder = "NIXPACKS_BUILDER"
+buildCommand = "pip install -r requirements.txt"
+watchPatterns = ["requirements.txt", "*.py", "database.py", "gemini_service.py", "whisper_service.py", "tts_service.py", "auth.py"]
+
+[builds.frontend]
+builder = "NIXPACKS_BUILDER"
+buildCommand = "cd frontend && npm install && npm run build"
+watchPatterns = ["frontend/package.json", "frontend/next.config.js", "frontend/tailwind.config.ts"]
+
+[deployments]
+[deployments.backend]
+command = "python3 app.py"
+healthcheckPath = "/health"
+healthcheckTimeout = 100
+restartPolicyType = "ON_FAILURE"
+restartPolicyMaxRetries = 10
+
+[deployments.frontend]
+command = "cd frontend && npm start"
+healthcheckPath = "/"
+healthcheckTimeout = 60
+restartPolicyType = "ON_FAILURE"
+restartPolicyMaxRetries = 10
+
+[[services]]
+name = "backend"
+service_id = "backend"
+
+[[services]]
+name = "frontend"
+service_id = "frontend"
