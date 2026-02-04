@@ -24,3 +24,15 @@ data/
 # IDE settings
 .vscode/
 .idea/
+
+# Test coverage
+.pytest_cache/
+coverage/
+htmlcov/
+.coverage
+.coverage.*
+*.cover
+
+# Frontend
+frontend/coverage/
+frontend/.next/
