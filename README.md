@@ -1,136 +1,328 @@
-# 🎓 MentorAI
+# MentorAI - Step-by-Step Guide
 
-An autonomous learning companion built with Google's Gemini 3 API for the Gemini 3 Hackathon. Interactive AI tutoring with persistent conversation history and multimodal capabilities.
+## Getting Started
 
-## Features
+### Step 1: Initial Setup
 
-- ✅ **Gemini 3 Integration** - Stateful chat sessions with context retention
-- ✅ **Persistent Memory** - SQLite database for conversation history
-- ✅ **RESTful API** - Flask backend with session management
-- ✅ **Test Suite** - Pytest infrastructure with database tests
-- 🚧 **Voice Tutoring** - Live API integration (coming soon)
-- 🚧 **Multimodal Learning** - Document upload and image analysis (coming soon)
+1. **Clone the repository**
+   ```bash
+   git clone <repository-url>
+   cd mentorai
+   ```
 
-## Tech Stack
+2. **Set up Python virtual environment**
+   ```bash
+   python -m venv venv
+   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   ```
 
-- **Backend**: Flask + Python 3.x
-- **AI**: Google Gemini 3 Flash Preview (1M token context)
-- **Database**: SQLite
-- **Testing**: Pytest
-- **Deployment**: Render (planned)
+3. **Install backend dependencies**
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-## Quick Start
+### Step 2: Configuration
 
-### 1. Clone & Install
-```bash
-git clone <your-repo-url>
-cd mentorai
-pip install -r requirements.txt
-```
+1. **Create `.env` file** in the root directory with:
+   ```
+   GOOGLE_GEMINI_KEY=your_gemini_api_key
+   OPENAI_API_KEY=your_openai_api_key
+   JWT_SECRET=your_jwt_secret
+   DATABASE_URL=sqlite:///data/mentorai.db
+   ```
 
-### 2. Configure API Key
-Create a `.env` file in the root directory:
-```env
-GOOGLE_GEMINI_KEY=your_gemini_api_key_here
-```
+2. **Create `.gitignore`** to protect sensitive data:
+   ```
+   .env
+   data/mentorai.db
+   __pycache__/
+   venv/
+   ```
 
-### 3. Run Backend
-```bash
-python app.py
-```
-Server runs on `http://localhost:5000`
+3. **Initialize the database** (auto-created on first run)
+   ```bash
+   mkdir -p data
+   ```
 
-### 4. Test the API
-```bash
-# Health check
-curl http://localhost:5000/health
+### Step 3: Backend Setup
 
-# Create session
-curl -X POST http://localhost:5000/session/new \
-  -H "Content-Type: application/json" \
-  -d '{"user_id":"test","title":"My Chat"}'
+1. **Run backend tests** to verify setup:
+   ```bash
+   pytest tests/
+   ```
 
-# Send message
-curl -X POST http://localhost:5000/chat \
-  -H "Content-Type: application/json" \
-  -d '{"session_id":"<session_id>","message":"Explain quantum computing"}'
-```
+2. **Start the Flask server**:
+   ```bash
+   python app.py
+   ```
 
-## API Endpoints
+3. **Verify backend health**:
+   - Navigate to `http://localhost:5000/health`
+   - Should return health status
 
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/health` | GET | Health check |
-| `/session/new` | POST | Create new chat session |
-| `/chat` | POST | Send message and get AI response |
-| `/history/<session_id>` | GET | Retrieve conversation history |
-| `/sessions` | GET | List all user sessions |
+### Step 4: Frontend Setup
 
-## Testing
+1. **Navigate to frontend directory**:
+   ```bash
+   cd frontend
+   ```
 
-Run the test suite:
-```bash
-pytest tests/
-```
+2. **Install frontend dependencies**:
+   ```bash
+   npm install
+   ```
 
-Test individual features:
-```bash
-python test_memory_problem.py  # Shows stateless API behavior
-python test_memory_solution.py  # Shows stateful chat sessions
-```
+3. **Configure frontend environment**:
+   - Create `.env.local` file:
+     ```
+     NEXT_PUBLIC_API_URL=http://localhost:5000
+     NEXTAUTH_SECRET=your_nextauth_secret
+     NEXTAUTH_URL=http://localhost:3000
+     ```
 
-## Project Structure
+4. **Start development server**:
+   ```bash
+   npm run dev
+   ```
+
+5. **Access the application**:
+   - Open `http://localhost:3000` in your browser
+
+### Step 5: Testing the Application
+
+1. **Register a new user**:
+   - Go to registration page
+   - Create account with email/password
+
+2. **Login**:
+   - Use credentials to login
+   - JWT token generated (24-hour expiration)
+
+3. **Create a chat session**:
+   - Click "New Session"
+   - Session created in database
+
+4. **Send a message**:
+   - Type message and send
+   - Gemini AI responds with context memory
+
+5. **Test voice features** (optional):
+   - Upload voice message (MP3/WAV)
+   - Whisper transcribes to text
+   - Gemini responds, TTS synthesizes speech
+
+6. **Test multimodal features** (optional):
+   - Upload image for analysis
+   - Upload PDF for text extraction
+
+---
+
+## Development Workflow
+
+### Step 6: Making Changes
+
+1. **Create feature branch**:
+   ```bash
+   git checkout -b feature/your-feature-name
+   ```
+
+2. **Make code changes**:
+   - Backend: Edit Python files in root
+   - Frontend: Edit files in `frontend/`
+
+3. **Run tests**:
+   ```bash
+   # Backend tests
+   pytest tests/
+   
+   # Frontend tests
+   cd frontend
+   npm test
+   npm run test:coverage
+   ```
+
+4. **Commit changes**:
+   ```bash
+   git add .
+   git commit -m "Description of changes"
+   git push origin feature/your-feature-name
+   ```
+
+5. **Merge to main**:
+   - Create pull request on GitHub
+   - Review and merge
+   - CI/CD pipeline runs automatically
+
+---
+
+## Deployment
+
+### Step 7: Railway Deployment
+
+1. **Install Railway CLI**:
+   ```bash
+   npm install -g @railway/cli
+   ```
+
+2. **Login to Railway**:
+   ```bash
+   railway login
+   ```
+
+3. **Initialize Railway project**:
+   ```bash
+   railway init
+   ```
+
+4. **Deploy backend service**:
+   ```bash
+   railway up --service=backend
+   ```
+
+5. **Deploy frontend service**:
+   ```bash
+   railway up --service=frontend
+   ```
+
+6. **Configure environment variables in Railway dashboard**:
+   
+   **Backend**:
+   - `GOOGLE_GEMINI_KEY` - Your Google Gemini API key
+   - `OPENAI_API_KEY` - Your OpenAI API key for Whisper
+   - `JWT_SECRET` - Your JWT secret token
+   - `DATABASE_URL` - SQLite database path (default: `sqlite:///data/mentorai.db`)
+   
+   **Frontend**:
+   - `NEXT_PUBLIC_API_URL` - Backend URL (e.g., `https://your-backend.railway.app`)
+   - `NEXTAUTH_SECRET` - Your NextAuth secret
+   - `NEXTAUTH_URL` - Frontend URL (e.g., `https://your-frontend.railway.app`)
+
+### Step 8: CI/CD Setup
+
+1. **Add Railway token to GitHub**:
+   - Go to GitHub repository → Settings → Secrets
+   - Add `RAILWAY_TOKEN`
+
+2. **Push to main branch**:
+   ```bash
+   git push origin main
+   ```
+
+3. **CI/CD automatically**:
+   - ✅ Runs pytest tests
+   - ✅ Runs jest tests
+   - ✅ Runs linting checks
+   - ✅ Deploys to Railway
+
+---
+
+## Hackathon Submission
+
+### Step 9: Documentation
+
+1. ✅ Complete API documentation (`API.md`)
+2. ✅ Write demo script (`DEMO.md`)
+3. ✅ Create presentation outline (`PRESENTATION.md`)
+4. ✅ Document theme customization (`frontend/THEME.md`)
+5. ✅ Update frontend setup guide (`frontend/SETUP.md`)
+
+### Step 10: Demo Preparation
+
+1. **Prepare test accounts**:
+   - Create demo user account
+   - Pre-populate sample conversations
+
+2. **Test all features**:
+   - ✅ User registration/login
+   - ✅ Chat with context memory
+   - ✅ Voice input/output
+   - ✅ Image analysis
+   - ✅ PDF processing
+
+3. **Record demo video**:
+   - Follow script in `DEMO.md`
+   - Showcase all Gemini 3 features
+
+### Step 11: Final Submission (Deadline: Feb 9, 2026)
+
+1. **Verify deployment**:
+   - Backend URL working
+   - Frontend URL working
+   - All features functional
+
+2. **Submit to Devpost**:
+   - Project description
+   - Demo video/screenshots
+   - GitHub repository link
+   - Live deployment link
+
+3. **Final checklist**:
+   - ✅ Code tested and working
+   - ✅ Documentation complete
+   - ✅ Deployed and accessible
+   - ✅ Demo prepared
+   - ✅ Submission submitted
+
+---
+
+## Quick Reference
+
+### API Endpoints
+
+| Endpoint | Method | Description | Auth Required |
+|----------|--------|-------------|---------------|
+| `/health` | GET | Health check | No |
+| `/auth/register` | POST | User registration | No |
+| `/auth/login` | POST | User login | No |
+| `/auth/me` | GET | Get current user | Yes |
+| `/auth/logout` | POST | User logout | Yes |
+| `/session/new` | POST | Create new chat session | Yes |
+| `/chat` | POST | Send message and get AI response | Yes |
+| `/chat/voice` | POST | Send voice message | Yes |
+| `/tts/synthesize` | POST | Synthesize speech from text | Yes |
+| `/upload` | POST | Upload file for analysis | Yes |
+| `/history/<session_id>` | GET | Retrieve conversation history | Yes |
+| `/sessions` | GET | List all user sessions | Yes |
+
+### Project Structure
 
 ```
 mentorai/
 ├── app.py                    # Flask application & routes
+├── auth.py                   # Authentication handlers
 ├── database.py               # SQLite operations
 ├── gemini_service.py         # Gemini API wrapper
+├── whisper_service.py        # OpenAI Whisper service
+├── tts_service.py            # Gemini TTS service
 ├── requirements.txt          # Dependencies
 ├── .env                      # API keys (not in repo)
 ├── .gitignore               # Git exclusions
+├── railway.json             # Railway backend config
+├── railway.toml             # Railway multi-service config
+├── Procfile                 # Backend process definition
 ├── tests/
 │   └── test_database.py     # Database unit tests
-└── data/
-    └── mentorai.db          # SQLite database (auto-created)
+├── data/
+│   └── mentorai.db          # SQLite database (auto-created)
+└── frontend/                # Next.js application
+    ├── app/                 # Next.js app directory
+    ├── components/          # React components
+    ├── lib/                 # Utilities and API client
+    ├── types/               # TypeScript types
+    ├── package.json         # Frontend dependencies
+    └── next.config.js       # Next.js configuration
 ```
 
-## How It Works
-
-**Stateless vs Stateful**:
-- Gemini API calls via `generate_content()` are stateless (no memory)
-- Chat sessions via `client.chats.create()` maintain conversation context
-- Database stores full history for session recovery
-
-**Memory Management**:
-- Active chat objects stored in `GeminiService.active_chats`
-- On session reload, history is replayed to rebuild context
-- Leverages Gemini's 1M token context window for long conversations
-
-## Hackathon Highlights
-
-Built for [Gemini 3 Hackathon](https://gemini3.devpost.com) (Dec 17, 2025 - Feb 9, 2026)
-
-**Why MentorAI Stands Out**:
-- Interactive tutoring vs static note generation
-- Production-ready architecture with testing & CI/CD
-- Comprehensive use of Gemini 3 features (Flash, Live API, multimodal)
-- Professional development practices (pytest, security, documentation)
-
-## Development Timeline
+### Development Timeline
 
 - ✅ Week 1: API integration, database, testing
-- 🚧 Week 2: Voice features, multimodal capabilities
-- 🚧 Week 3: Frontend, deployment, demo prep
-
-## Contributing
-
-This is a hackathon project, but feedback welcome! Feel free to open issues or submit PRs.
-
-## License
-
-MIT License - Built for educational purposes
+- ✅ Week 2: Auth system, Next.js frontend, dark theme
+- ✅ Week 3: Voice features, multimodal capabilities
+- ✅ Week 4: Testing, QA, deployment setup (Railway + CI/CD)
+- ✅ Week 5: Documentation (API, Setup, Theme), demo prep, presentation
 
 ---
 
-**Built with** ❤️ **by Yatin for the Gemini 3 Hackathon**
+**Ready to impress the judges! 🚀**
+
+**Built with ❤️ by Yatin for the Gemini 3 Hackathon**
