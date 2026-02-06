@@ -3,34 +3,3 @@ flask-cors==4.0.0
 google-genai==1.0.0
 python-dotenv==1.0.0
 pytest==7.4.3
-
-
----
-
-## File 5: Update `.gitignore`
-
-.env
-
-# Virtual environment
-venv/
-env/
-
-# Python cache
-__pycache__/
-*.pyc
-*.pyo
-
-# Database
-data/
-*.db
-
-# OS files
-.DS_Store
-Thumbs.db
-
-# Uploads folder
-uploads/
-
-# IDE settings
-.vscode/
-.idea/
