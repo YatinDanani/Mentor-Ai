@@ -1,0 +1,22 @@
+# Core Flask dependencies
+flask==3.0.0
+flask-cors==4.0.0
+python-dotenv==1.0.0
+
+# AI/ML Services
+google-genai==1.0.0          # Gemini API (REQUIRED)
+openai>=1.0.0                # Whisper (optional - for voice)
+google-cloud-texttospeech>=2.16.3  # TTS (optional - for voice)
+
+# Authentication & Security
+PyJWT==2.8.0
+bcrypt==4.1.1
+
+# File Processing
+Pillow==10.2.0               # Image processing
+PyPDF2==3.0.1                # PDF processing
+pydub==0.25.1                # Audio processing
+
+# Testing (optional)
+pytest==7.4.3
+pytest-cov==4.1.0

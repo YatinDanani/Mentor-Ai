@@ -1,0 +1,1 @@
+[{"dir": "./"}, {"setupFilesAfterEnv": ["<rootDir>/jest.setup.js"], "testEnvironment": "jest-environment-jsdom", "moduleNameMapper": {"^@/(.*)$": "<rootDir>/$1"}, "testMatch": ["**/__tests__/**/*.[jt]s?(x)", "**/*.(test|spec).[jt]s?(x)"], "collectCoverageFrom": ["app/**/*.{js,jsx,ts,tsx}", "components/**/*.{js,jsx,ts,tsx}", "lib/**/*.{js,jsx,ts,tsx}"]}]
